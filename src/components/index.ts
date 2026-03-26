@@ -1,3 +1,5 @@
+export * from './IntelAnalyst';
+export { IntelAnalystChat } from './IntelAnalyst';
 export * from './Panel';
 export * from './VirtualList';
 export { MapComponent } from './Map';

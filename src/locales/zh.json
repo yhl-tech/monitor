@@ -3,6 +3,21 @@
     "title": "World Monitor",
     "description": "AI驱动的全球态势感知"
   },
+  "intelAnalyst": {
+    "chats": "对话",
+    "newChat": "新建对话",
+    "newChatTitle": "新分析",
+    "emptyThread": "发送消息以开始分析。",
+    "inputPlaceholder": "请输入",
+    "generatedAt": "生成于",
+    "thinking": "思考中",
+    "showThinking": "显示推理",
+    "hideThinking": "隐藏推理",
+    "collapse": "收起侧栏",
+    "headerToggleTitle": "展开或收起情报分析师对话侧栏",
+    "headerToggleShort": "情报对话",
+    "quotaTooltip": "本周期分析师对话配额：已用 {{used}} / 上限 {{total}}。绿条表示占用比例；接入后端后为实时数据。"
+  },
   "countryBrief": {
     "identifying": "正在识别国家...",
     "locating": "正在定位区域...",
@@ -214,6 +229,8 @@
     "techHubs": "热门科技中心",
     "status": "系统状态",
     "insights": "AI洞察",
+    "intelAnalyst": "AI分析师",
+    "intelAnalystSidebar": "情报分析师",
     "strategicPosture": "AI战略态势",
     "cii": "国家不稳定性",
     "strategicRisk": "战略风险概览",

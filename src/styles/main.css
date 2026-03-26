@@ -306,6 +306,39 @@ canvas,
   gap: 16px;
 }
 
+/* Intel analyst chat — header toggle (left of variant switcher) */
+.intel-analyst-header-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  margin-right: 2px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--overlay-subtle);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.intel-analyst-header-toggle:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.intel-analyst-header-toggle svg {
+  pointer-events: none;
+}
+
+.intel-analyst-header-toggle--collapsed {
+  color: var(--green, #00c853);
+  border-color: rgba(0, 200, 83, 0.35);
+  background: rgba(0, 200, 83, 0.08);
+}
+
 /* Variant Switcher */
 .variant-switcher {
   display: flex;
@@ -959,11 +992,18 @@ canvas,
   flex: 1 1 0;
   min-height: 0;
   display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  flex-direction: row;
+  overflow: hidden;
   background: var(--bg);
   width: 100%;
+}
+
+.intel-hub-main {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .map-section {
@@ -1121,6 +1161,8 @@ canvas,
   align-content: start;
   align-items: stretch;
   min-height: 0;
+  overflow-y: auto;
+  flex: 1 1 0;
   position: relative;
   z-index: 1;
   /* This ensures panels scroll UNDER the pinned map (z-index: 100) */
@@ -21207,3 +21249,4 @@ body.has-breaking-alert .panels-grid {
   font-size: 0.7rem;
   margin-left: 4px;
 }
+

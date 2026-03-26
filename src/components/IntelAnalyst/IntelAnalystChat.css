@@ -1,0 +1,605 @@
+/* ── Intel Analyst Chat Sidebar ─────────────────────────────────────────── */
+.intel-analyst-sidebar {
+  flex-basis: 340px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  min-width: 200px;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  height: 100%;
+  overflow: hidden;
+}
+
+.intel-analyst-sidebar.hidden {
+  display: none;
+}
+
+/* ── Responsive: collapse sidebar on small screens ──────────────────────── */
+@media (max-width: 900px) {
+  .intel-analyst-sidebar {
+    display: none;
+  }
+  .intel-analyst-sidebar.sidebar-open {
+    display: flex;
+    position: fixed;
+    left: 0;
+    top: var(--header-height, 48px);
+    bottom: 0;
+    z-index: 500;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* ── Resize Handle ──────────────────────────────────────────────────────── */
+.intel-resize-handle {
+  width: 4px;
+  flex-shrink: 0;
+  background: var(--border);
+  cursor: col-resize;
+  transition: background 0.15s;
+  position: relative;
+  z-index: 10;
+}
+.intel-resize-handle:hover,
+.intel-resize-handle.dragging {
+  background: var(--green, #00c853);
+}
+
+.intel-resize-handle.hidden {
+  display: none;
+}
+
+/* ── Intel Analyst Chat Component ─────────────────────────────────────── */
+
+.iac-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.iac-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 8px;
+  background: var(--surface);
+}
+
+.iac-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.iac-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  background: var(--green-dim, #1a4d2e);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iac-icon::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: var(--green, #00c853);
+  border-radius: 50%;
+}
+
+.iac-header-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iac-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.iac-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  padding: 0;
+}
+
+.iac-btn-icon:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+/* ── Body: session list + thread ────────────────────────────────────────── */
+.iac-body {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Session list ─────────────────────────────────────────────────────────── */
+.iac-session-list {
+  width: 52px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.iac-session-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px 4px;
+  gap: 2px;
+}
+
+.iac-section-label {
+  display: none; /* collapsed — icon-only list */
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.iac-session-items {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.iac-session-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 4px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.65rem;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.iac-session-item::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.iac-session-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.iac-session-item.active {
+  background: var(--surface-hover);
+  color: var(--green, #00c853);
+}
+
+.iac-session-item.active::before {
+  opacity: 1;
+}
+
+.iac-session-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Message thread ───────────────────────────────────────────────────────── */
+.iac-thread {
+  flex: 1 1 0;
+  overflow-y: auto;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.iac-thread-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ── Messages ─────────────────────────────────────────────────────────────── */
+.iac-msg {
+  display: flex;
+  gap: 6px;
+  animation: iac-fadein 0.2s ease-out;
+}
+
+@keyframes iac-fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.iac-msg--user {
+  flex-direction: row-reverse;
+}
+
+.iac-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.iac-avatar--assistant {
+  background: var(--green-dim, #1a4d2e);
+  border-radius: 50%;
+}
+
+.iac-avatar--assistant::after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--green, #00c853);
+  border-radius: 50%;
+  margin: 6px auto 0;
+}
+
+.iac-msg-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.iac-bubble {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  padding: 6px 10px;
+  border-radius: 8px;
+  word-break: break-word;
+}
+
+.iac-msg--user .iac-bubble {
+  background: var(--green, #00c853);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.iac-msg--assistant .iac-bubble {
+  background: var(--surface-hover);
+  color: var(--text);
+  border-bottom-left-radius: 2px;
+}
+
+.iac-meta {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  padding: 0 2px;
+}
+
+.iac-meta--user {
+  text-align: right;
+}
+
+/* ── Chain of thought ─────────────────────────────────────────────────────── */
+.iac-cot {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+
+.iac-cot-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.iac-cot-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.iac-cot-toggle {
+  font-size: 0.62rem;
+  border: none;
+  background: transparent;
+  color: var(--green, #00c853);
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.15s;
+}
+
+.iac-cot-toggle:hover { opacity: 0.75; }
+
+.iac-cot-steps {
+  list-style: none;
+  margin: 0;
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.iac-cot-steps li {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  padding-left: 10px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.iac-cot-steps li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--green-dim, #1a4d2e);
+}
+
+.iac-cot--collapsed .iac-cot-steps {
+  display: none;
+}
+
+/* ── Data sources ─────────────────────────────────────────────────────────── */
+.iac-sources {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.iac-source-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: background 0.15s;
+  font-size: 0.65rem;
+}
+
+.iac-source-row:hover {
+  background: var(--surface-hover);
+}
+
+.iac-source-label {
+  color: var(--green, #00c853);
+  font-weight: 500;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.iac-source-snippet {
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── SITREP card ─────────────────────────────────────────────────────────── */
+.iac-sitrep {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 4px;
+  background: var(--surface);
+}
+
+.iac-sitrep-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.iac-sitrep-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.iac-sitrep-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.iac-sitrep-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.iac-sitrep-sev {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.iac-sitrep-meta {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+}
+
+.iac-sitrep-bluf {
+  padding: 7px 10px;
+  font-size: 0.72rem;
+  color: var(--text);
+  background: rgba(0, 200, 83, 0.06);
+  border-bottom: 1px solid var(--border);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.iac-sitrep-sections {
+  display: flex;
+  flex-direction: column;
+}
+
+.iac-sitrep-section {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.iac-sitrep-section:last-child {
+  border-bottom: none;
+}
+
+.iac-sitrep-heading {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 3px;
+}
+
+.iac-sitrep-body {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ── Model info ──────────────────────────────────────────────────────────── */
+.iac-model-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  padding: 2px 0;
+}
+
+.iac-model-name {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  font-family: monospace;
+}
+
+.iac-model-extras {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+/* ── Footer / input ──────────────────────────────────────────────────────── */
+.iac-footer {
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--surface);
+}
+
+/* Input row */
+.iac-input-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.iac-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  padding: 9px 12px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+  overflow: hidden;
+  box-sizing: border-box;
+  min-height: 72px;
+  max-height: 200px;
+  transition: border-color 0.15s;
+}
+
+.iac-input:focus {
+  border-color: var(--green, #00c853);
+}
+
+.iac-input::placeholder {
+  color: var(--text-dim);
+}
+
+.iac-send-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 8px;
+  background: var(--green, #00c853);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.iac-send-btn:hover { background: var(--green-dim, #1a4d2e); }
+.iac-send-btn.loading { opacity: 0.5; cursor: not-allowed; }
+.iac-send-btn svg { pointer-events: none; }

@@ -75,6 +75,7 @@ export const STORAGE_KEYS = {
   mapMode: 'worldmonitor-map-mode',          // 'flat' | 'globe'
   activeChannel: 'worldmonitor-active-channel',
   webcamPrefs: 'worldmonitor-webcam-prefs',
+  sidebarWidth: 'worldmonitor-sidebar-width', // Intel Analyst sidebar width in px
 } as const;
 
 // Type definitions for variant configs

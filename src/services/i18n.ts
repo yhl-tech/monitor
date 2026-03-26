@@ -2,7 +2,9 @@ import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 // English is always needed as fallback — bundle it eagerly.
+// Chinese is the primary UI language — also bundle eagerly.
 import enTranslation from '../locales/en.json';
+import zhTranslation from '../locales/zh.json';
 
 const SUPPORTED_LANGUAGES = ['en', 'bg', 'cs', 'fr', 'de', 'el', 'es', 'it', 'pl', 'pt', 'nl', 'sv', 'ru', 'ar', 'zh', 'ja', 'ko', 'ro', 'tr', 'th', 'vi'] as const;
 type SupportedLanguage = typeof SUPPORTED_LANGUAGES[number];
@@ -20,11 +22,11 @@ const localeModules = import.meta.glob<TranslationDictionary>(
 const RTL_LANGUAGES = new Set(['ar']);
 
 function normalizeLanguage(lng: string): SupportedLanguage {
-  const base = (lng || 'en').split('-')[0]?.toLowerCase() || 'en';
+  const base = (lng || 'zh').split('-')[0]?.toLowerCase() || 'zh';
   if (SUPPORTED_LANGUAGE_SET.has(base as SupportedLanguage)) {
     return base as SupportedLanguage;
   }
-  return 'en';
+  return 'zh';
 }
 
 function applyDocumentDirection(lang: string): void {
@@ -48,8 +50,8 @@ async function ensureLanguageLoaded(lng: string): Promise<SupportedLanguage> {
     translation = enTranslation as TranslationDictionary;
   } else {
     const loader = localeModules[`../locales/${normalized}.json`];
-    if (!loader) {
-      console.warn(`No locale file for "${normalized}", falling back to English`);
+      if (!loader) {
+      console.warn(`No locale file for "${normalized}", falling back to Chinese`);
       translation = enTranslation as TranslationDictionary;
     } else {
       translation = await loader();
@@ -64,23 +66,26 @@ async function ensureLanguageLoaded(lng: string): Promise<SupportedLanguage> {
 // Initialize i18n
 export async function initI18n(): Promise<void> {
   if (i18next.isInitialized) {
-    const currentLanguage = normalizeLanguage(i18next.language || 'en');
+    const currentLanguage = normalizeLanguage(i18next.language || 'zh');
     await ensureLanguageLoaded(currentLanguage);
     applyDocumentDirection(i18next.language || currentLanguage);
     return;
   }
 
   loadedLanguages.add('en');
+  loadedLanguages.add('zh');
 
   await i18next
     .use(LanguageDetector)
     .init({
       resources: {
         en: { translation: enTranslation as TranslationDictionary },
+        zh: { translation: zhTranslation as TranslationDictionary },
       },
+      lng: 'zh',
       supportedLngs: [...SUPPORTED_LANGUAGES],
       nonExplicitSupportedLngs: true,
-      fallbackLng: 'en',
+      fallbackLng: 'zh',
       debug: import.meta.env.DEV,
       interpolation: {
         escapeValue: false, // not needed for these simple strings
@@ -91,9 +96,8 @@ export async function initI18n(): Promise<void> {
       },
     });
 
-  const detectedLanguage = await ensureLanguageLoaded(i18next.language || 'en');
-  if (detectedLanguage !== 'en') {
-    // Re-trigger translation resolution now that the detected bundle is loaded.
+  const detectedLanguage = await ensureLanguageLoaded(i18next.language || 'zh');
+  if (detectedLanguage !== 'zh') {
     await i18next.changeLanguage(detectedLanguage);
   }
 
@@ -115,7 +119,7 @@ export async function changeLanguage(lng: string): Promise<void> {
 
 // Helper to get current language (normalized to short code)
 export function getCurrentLanguage(): string {
-  const lang = i18next.language || 'en';
+  const lang = i18next.language || 'zh';
   return lang.split('-')[0]!;
 }
 

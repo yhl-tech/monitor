@@ -1,0 +1,1 @@
+export { IntelAnalystChat } from './IntelAnalystChat';
