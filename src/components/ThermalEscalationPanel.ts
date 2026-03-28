@@ -1,4 +1,5 @@
 import { Panel } from './Panel';
+import { t } from '@/services/i18n';
 import type { ThermalEscalationCluster, ThermalEscalationWatch } from '@/services/thermal-escalation';
 import { escapeHtml } from '@/utils/sanitize';
 
@@ -23,7 +24,7 @@ export class ThermalEscalationPanel extends Panel {
   constructor() {
     super({
       id: 'thermal-escalation',
-      title: 'Thermal Escalation',
+      title: t('panels.thermalEscalation'),
       showCount: true,
       trackActivity: true,
       infoTooltip: 'Seeded FIRMS/VIIRS thermal anomaly clusters with baseline comparison, persistence tracking, and strategic context. This panel answers where thermal activity is abnormal and which clusters may signal conflict, industrial disruption, or escalation.',

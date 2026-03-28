@@ -1,4 +1,5 @@
 import { Panel } from './Panel';
+import { t } from '@/services/i18n';
 import { getRpcBaseUrl } from '@/services/rpc-client';
 import { IntelligenceServiceClient } from '@/generated/client/worldmonitor/intelligence/v1/service_client';
 import { h, replaceChildren } from '@/utils/dom-utils';
@@ -24,7 +25,7 @@ export class DeductionPanel extends Panel {
     constructor(getLatestNews?: () => NewsItem[]) {
         super({
             id: 'deduction',
-            title: 'Deduct Situation',
+            title: t('panels.deduction'),
             infoTooltip: 'Use AI intelligence to deduct the timeline and impact of a hypothetical or current event.',
         });
 

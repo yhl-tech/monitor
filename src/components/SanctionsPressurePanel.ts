@@ -1,4 +1,5 @@
 import { Panel } from './Panel';
+import { t } from '@/services/i18n';
 import type { CountrySanctionsPressure, ProgramSanctionsPressure, SanctionsEntry, SanctionsPressureResult } from '@/services/sanctions-pressure';
 import { escapeHtml } from '@/utils/sanitize';
 
@@ -8,7 +9,7 @@ export class SanctionsPressurePanel extends Panel {
   constructor() {
     super({
       id: 'sanctions-pressure',
-      title: 'Sanctions & Designations',
+      title: t('panels.sanctionsPressure'),
       showCount: true,
       trackActivity: true,
       defaultRowSpan: 2,

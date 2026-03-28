@@ -1217,6 +1217,17 @@ export default defineConfig(({ mode }) => {
             });
           },
         },
+        // OSINT Intel Hub - Agent API proxy (development only)
+        '/api/osint': {
+          target: 'http://localhost:8001',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api\/osint/, '/api'),
+          configure: (proxy) => {
+            proxy.on('error', (err) => {
+              console.log('OSINT proxy error:', err.message);
+            });
+          },
+        },
       },
     },
   };

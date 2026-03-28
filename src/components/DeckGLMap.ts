@@ -4202,10 +4202,6 @@ export class DeckGLMap {
       </div>
     `;
 
-    const authorBadge = document.createElement('div');
-    authorBadge.className = 'map-author-badge';
-    authorBadge.textContent = '© Elie Habib · Someone™';
-    toggles.appendChild(authorBadge);
 
     this.container.appendChild(toggles);
 
@@ -4596,6 +4592,20 @@ export class DeckGLMap {
       padding: 40,
       duration: 800,
       maxZoom: 8,
+    });
+  }
+
+  /**
+   * Fly to a specific city location with smooth animation.
+   * Used by IntelSituationOverlay to simulate "locking on target".
+   */
+  public flyToCity(lat: number, lon: number, zoom = 17, duration = 2500): void {
+    if (!this.maplibreMap) return;
+    this.maplibreMap.flyTo({
+      center: [lon, lat],
+      zoom,
+      duration,
+      essential: true,
     });
   }
 

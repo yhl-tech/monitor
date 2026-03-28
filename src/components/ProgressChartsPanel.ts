@@ -26,7 +26,7 @@ export class ProgressChartsPanel extends Panel {
   private tooltip: HTMLDivElement | null = null;
 
   constructor() {
-    super({ id: 'progress', title: 'Human Progress', trackActivity: false });
+    super({ id: 'progress', title: t('panels.humanProgress'), trackActivity: false });
     this.setupResizeObserver();
   }
 

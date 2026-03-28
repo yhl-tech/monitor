@@ -2,6 +2,7 @@
 // Polls /api/llm-health every 60s. Shows green dot when available, red when offline.
 
 import { h } from '@/utils/dom-utils';
+import { t } from '@/services/i18n';
 
 const POLL_INTERVAL_MS = 60_000;
 
@@ -26,7 +27,7 @@ export class LlmStatusIndicator {
     }, 'LLM');
     this.element = h('div', {
       className: 'llm-status-indicator',
-      title: 'LLM provider status — checking...',
+      title: t('header.llmStatusChecking'),
       style: 'display:flex;align-items:center;padding:0 6px;cursor:default;user-select:none;',
     }, this.dot, this.label);
 

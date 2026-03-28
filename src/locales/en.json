@@ -38,6 +38,17 @@
     "newChat": "New chat",
     "newChatTitle": "New analysis",
     "emptyThread": "Send a message to start the analysis.",
+    "emptyIntroTitle": "Hello! I'm your intelligence assistant",
+    "emptyIntroSubtitle": "I can help you with:",
+    "emptyFeature1": "Analyze global news and incidents",
+    "emptyFeature2": "Interpret regional geopolitical dynamics",
+    "emptyFeature3": "Provide risk posture assessments",
+    "emptyFeature4": "Answer intelligence analysis questions",
+    "emptyPrompt1": "Assess today's global hotspot risks",
+    "emptyPrompt2": "Give me a Middle East situation brief",
+    "emptyPrompt3": "Evaluate energy supply-chain vulnerabilities",
+    "clearChats": "Clear chats",
+    "clearChatsConfirm": "Clear all chat history?",
     "inputPlaceholder": "Ask about geopolitical events\u2026",
     "generatedAt": "Generated",
     "thinking": "Thinking",
@@ -1142,6 +1153,17 @@
         "3": "ROUND HOUSE - INCREASE FORCE READINESS",
         "4": "DOUBLE TAKE - INCREASED INTELLIGENCE WATCH",
         "5": "FADE OUT - LOWEST READINESS"
+      },
+      "names": {
+        "extremePizza": "Extreme Pizza",
+        "districtPizzaPalace": "District Pizza Palace",
+        "weThePizza": "We, The Pizza",
+        "nighthawkBreweryPizza": "Nighthawk Brewery & Pizza",
+        "papaJohnsPizza": "Papa Johns Pizza",
+        "pizzatoPizza": "Pizzato Pizza",
+        "dominosPentagonClosest": "Domino's Pizza (Pentagon Closest)",
+        "freddiesBeachBar": "Freddie's Beach Bar & Restaurant",
+        "littleGayPub": "The Little Gay Pub"
       }
     },
     "strategicPosture": {
@@ -1300,6 +1322,7 @@
         "militaryBases": "Military Bases",
         "nuclearSites": "Nuclear Sites",
         "gammaIrradiators": "Gamma Irradiators",
+        "radiationWatch": "Radiation Watch",
         "radiationSpike": "Radiation spike",
         "radiationElevated": "Elevated radiation",
         "spaceports": "Spaceports",

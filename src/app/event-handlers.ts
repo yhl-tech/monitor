@@ -896,9 +896,28 @@ export class EventHandlerManager implements AppModule {
   startHeaderClock(): void {
     const el = document.getElementById('headerClock');
     if (!el) return;
-    const tick = () => {
-      el.textContent = new Date().toUTCString().replace('GMT', 'UTC');
+
+    const formatDateTime = (date: Date, tz: string, label: string) => {
+      const parts = date.toLocaleString('en-US', {
+        timeZone: tz,
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }).split(', ');
+      return `${parts[0]} ${parts[1]} ${label}`;
     };
+
+    const tick = () => {
+      const now = new Date();
+      const utc = formatDateTime(now, 'UTC', 'UTC');
+      const bjt = formatDateTime(now, 'Asia/Shanghai', 'BJT');
+      el.textContent = `${utc}  |  ${bjt}`;
+    };
+
     tick();
     this.clockIntervalId = setInterval(tick, 1000);
   }

@@ -1,5 +1,6 @@
 import type { PizzIntStatus, GdeltTensionPair } from '@/types';
 import { t } from '@/services/i18n';
+import { localizePizzintLocationName } from '@/services/pizzint';
 import { h, replaceChildren } from '@/utils/dom-utils';
 
 const DEFCON_COLORS: Record<number, string> = {
@@ -88,7 +89,7 @@ export class PizzIntIndicator {
     replaceChildren(locationsEl,
       ...this.status.locations.map(loc =>
         h('div', { className: 'pizzint-location' },
-          h('span', { className: 'pizzint-location-name' }, loc.name),
+          h('span', { className: 'pizzint-location-name' }, localizePizzintLocationName(loc.name)),
           h('span', { className: `pizzint-location-status ${this.getStatusClass(loc)}` }, this.getStatusLabel(loc)),
         ),
       ),

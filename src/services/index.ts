@@ -27,6 +27,7 @@ export * from './military-vessels';
 export * from './usni-fleet';
 export * from './pizzint';
 export * from './eonet';
+export * from './chat';
 export { analysisWorker } from './analysis-worker';
 export { activityTracker } from './activity-tracker';
 export * from './geo-convergence';

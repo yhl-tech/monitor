@@ -235,7 +235,7 @@ export class CryptoPanel extends Panel {
 
 export class CryptoHeatmapPanel extends Panel {
   constructor() {
-    super({ id: 'crypto-heatmap', title: 'Crypto Sectors' });
+    super({ id: 'crypto-heatmap', title: t('panels.cryptoSectors') });
   }
 
   public renderSectors(data: Array<{ id: string; name: string; change: number }>): void {
@@ -294,18 +294,18 @@ export class TokenListPanel extends Panel {
 
 export class DefiTokensPanel extends TokenListPanel {
   constructor() {
-    super({ id: 'defi-tokens', title: 'DeFi Tokens', infoTooltip: t('components.defiTokens.infoTooltip') });
+    super({ id: 'defi-tokens', title: t('panels.defiTokens'), infoTooltip: t('components.defiTokens.infoTooltip') });
   }
 }
 
 export class AiTokensPanel extends TokenListPanel {
   constructor() {
-    super({ id: 'ai-tokens', title: 'AI Tokens', infoTooltip: t('components.aiTokens.infoTooltip') });
+    super({ id: 'ai-tokens', title: t('panels.aiTokens'), infoTooltip: t('components.aiTokens.infoTooltip') });
   }
 }
 
 export class OtherTokensPanel extends TokenListPanel {
   constructor() {
-    super({ id: 'other-tokens', title: 'Alt Tokens', infoTooltip: t('components.altTokens.infoTooltip') });
+    super({ id: 'other-tokens', title: t('panels.altTokens'), infoTooltip: t('components.altTokens.infoTooltip') });
   }
 }

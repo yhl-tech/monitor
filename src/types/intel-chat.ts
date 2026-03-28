@@ -20,6 +20,7 @@ export interface AssistantMessage {
   chainOfThought?: ChainOfThoughtBlock;
   dataSources?: DataSourceEntry[];
   sitrep?: SitrepBlock;
+  intelReport?: IntelReportBlock;
   modelInfo?: ModelInfoBlock;
   timestamp: number;
 }
@@ -60,6 +61,43 @@ export interface ModelInfoBlock {
   provider: string;
   latencyMs?: number;
   tokensUsed?: number;
+}
+
+// ── Intelligence Report (军事情报报告) ─────────────────────────────────────────
+
+export type IntelStepType =
+  | 'collection'   // 信息采集
+  | 'analysis'     // 分析研判
+  | 'correlation'  // 交叉验证
+  | 'prediction'  // 预测评估
+  | 'conclusion'; // 综合结论
+
+export interface IntelThinkingStep {
+  stepType: IntelStepType;
+  stepNumber: number;
+  title: string;
+  description: string;
+  result: string;
+  evidenceRef?: string[];
+  probability?: {
+    primary?: { location: string; probability: number };
+    secondary?: { location: string; probability: number };
+    tertiary?: { location: string; probability: number };
+    departureTime?: string;
+    transportMethod?: string;
+  };
+}
+
+export interface IntelReportBlock {
+  classification: 'UNCLASSIFIED' | 'CONFIDENTIAL' | 'SECRET' | 'TOPSECRET';
+  reportId: string;
+  subject: string;
+  targetName: string;
+  bluf: string;
+  overallSeverity: 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
+  sections: SitrepSection[];
+  thinkingProcess: IntelThinkingStep[];
+  generatedAt: string;
 }
 
 // ── Callbacks that will be wired to real API / SSE in future ────────────────

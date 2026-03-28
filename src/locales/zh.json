@@ -8,6 +8,15 @@
     "newChat": "新建对话",
     "newChatTitle": "新分析",
     "emptyThread": "发送消息以开始分析。",
+    "emptyIntroTitle": "你好！我是你的情报分析助手",
+    "emptyIntroSubtitle": "我可以帮你：",
+    "emptyFeature1": "分析全球新闻与事件",
+    "emptyFeature2": "解读地区政治动态",
+    "emptyFeature3": "提供风险态势评估",
+    "emptyFeature4": "回答情报分析问题",
+    "emptyPrompt1": "分析弗拉基米尔·普京最近行踪",
+    "clearChats": "清空对话",
+    "clearChatsConfirm": "确认清空所有对话记录？",
     "inputPlaceholder": "请输入",
     "generatedAt": "生成于",
     "thinking": "思考中",
@@ -219,7 +228,13 @@
     "panelCatCentralBanks": "央行与经济",
     "panelCatDeals": "交易与机构",
     "panelCatGulfMena": "海湾与中东",
-    "panelCatTradePolicy": "贸易政策"
+    "panelCatTradePolicy": "贸易政策",
+    "panelCatCorrelation": "关联分析",
+    "panelCatCommodityPrices": "价格与市场",
+    "panelCatMining": "矿业与供应链",
+    "panelCatCommodityEcon": "经济与贸易",
+    "panelCatHappyNews": "正面新闻",
+    "panelCatHappyPlanet": "地球与公益"
   },
   "panels": {
     "liveNews": "实时新闻",
@@ -293,14 +308,52 @@
     "gccInvestments": "GCC投资",
     "geoHubs": "地缘政治枢纽",
     "liveYouTube": "实时摄像头",
-    "pinnedWebcams": "Pinned Webcams",
+    "liveWebcams": "实时网络直播",
+    "windyWebcams": "Windy 实况摄像",
+    "pinnedWebcams": "固定摄像头",
     "gulfEconomies": "海湾经济",
     "gulfIndices": "海湾指数",
     "gulfCurrencies": "海湾货币",
     "gulfOil": "海湾石油",
-
-    "bigmac": "Real Big Mac Index",
-    "fearGreed": "Fear & Greed"
+    "bigmac": "巨无霸指数",
+    "groceryBasket": "购物篮指数",
+    "groceryItem": "商品",
+    "fuelPrices": "燃油价格",
+    "fuelPricesCountry": "国家",
+    "fuelPricesGasoline": "汽油",
+    "fuelPricesDiesel": "柴油",
+    "fearGreed": "恐惧与贪婪",
+    "worldClock": "世界时钟",
+    "positiveFeed": "正面新闻",
+    "conservationWins": "保护成就",
+    "renewableEnergy": "清洁能源",
+    "humanProgress": "人类进步",
+    "todaysHero": "今日英雄",
+    "goodThings": "每日五件好事",
+    "aiForecasts": "AI预测",
+    "forecast": "AI预测",
+    "militaryCorrelation": "军事态势",
+    "escalationCorrelation": "局势升级监测",
+    "economicCorrelation": "经济对抗",
+    "disasterCorrelation": "灾害连锁",
+    "dailyMarketBrief": "每日市场简报",
+    "liveCounters": "实时计数器",
+    "breakthroughs": "技术突破",
+    "cryptoSectors": "加密板块",
+    "defiTokens": "DeFi代币",
+    "aiTokens": "AI代币",
+    "altTokens": "其他代币",
+    "premiumStockAnalysis": "股票分析",
+    "premiumBacktesting": "回测工具",
+    "thermalEscalation": "热力升级",
+    "sanctionsPressure": "制裁与名单",
+    "radiationWatch": "辐射监测",
+    "energyComplex": "能源综合",
+    "nationalDebt": "国债时钟",
+    "marketImplications": "AI市场影响",
+    "deduction": "推断局势",
+    "deduceSituation": "使用AI推断局势",
+    "llmStatusChecking": "LLM服务状态 — 检测中..."
   },
   "commands": {
     "prefixes": {
@@ -810,6 +863,12 @@
       "tariffs": "关税",
       "flows": "贸易流量",
       "barriers": "贸易壁垒",
+      "overview": "概况",
+      "overviewNoteNoEffective": "无可用有效关税数据",
+      "usBaselineLabel": "美国基准税率",
+      "effectiveTariffRateLabel": "有效税率",
+      "gapLabel": "差距",
+      "overviewNoteTail": "基于美国301条款和WTO约束税率计算。",
       "noRestrictions": "无有效贸易限制",
       "noTariffData": "无可用关税数据",
       "noFlowData": "无可用贸易流量数据",
@@ -882,7 +941,7 @@
     },
     "pizzint": {
       "title": "五角大楼披萨指数",
-      "defcon": "DEFCON {{level}}",
+      "defcon": "战备 {{level}}",
       "updated": "更新于{{timeAgo}}",
       "tensionsTitle": "地缘政治紧张局势",
       "source": "来源：",
@@ -901,6 +960,17 @@
         "3": "圆屋 - 提高部队战备",
         "4": "双重确认 - 加强情报监视",
         "5": "淡出 - 最低战备"
+      },
+      "names": {
+        "extremePizza": "极限披萨",
+        "districtPizzaPalace": "特区比萨宫",
+        "weThePizza": "我们披萨",
+        "nighthawkBreweryPizza": "夜鹰精酿与披萨",
+        "papaJohnsPizza": "棒约翰披萨",
+        "pizzatoPizza": "皮萨托披萨",
+        "dominosPentagonClosest": "达美乐披萨（距五角大楼最近）",
+        "freddiesBeachBar": "弗雷迪海滩酒吧餐厅",
+        "littleGayPub": "小盖伊酒吧"
       }
     },
     "strategicPosture": {
@@ -1056,6 +1126,7 @@
         "militaryBases": "军事基地",
         "nuclearSites": "核设施",
         "gammaIrradiators": "伽马辐照器",
+        "radiationWatch": "辐射监测",
         "spaceports": "航天发射场",
         "satellites": "轨道监视",
         "pipelines": "管道",
@@ -1077,14 +1148,15 @@
         "gulfInvestments": "GCC投资",
         "tradeRoutes": "贸易航线",
         "iranAttacks": "伊朗袭击",
-        "gpsJamming": "GPS JAMMING",
+        "gpsJamming": "GPS 干扰",
         "ciiChoropleth": "CII不稳定度",
         "dayNight": "昼/夜",
         "positiveEvents": "正面事件",
         "kindness": "善举",
         "happiness": "世界幸福度",
         "speciesRecovery": "物种恢复",
-        "renewableInstallations": "清洁能源"
+        "renewableInstallations": "清洁能源",
+        "webcams": "实时网络直播"
       },
       "tooltip": {
         "earthquake": "地震",
@@ -1644,9 +1716,11 @@
       }
     },
     "panel": {
-      "showMethodologyInfo": "Show methodology info",
-      "dragToResize": "Drag to resize (double-click to reset)",
-      "openSettings": "Open Settings"
+      "showMethodologyInfo": "显示方法论说明",
+      "dragToResize": "拖动调整大小（双击重置）",
+      "openSettings": "打开设置",
+      "closePanel": "关闭面板",
+      "addPanel": "添加面板"
     },
     "languageSelector": {
       "selectLanguage": "Select Language",
@@ -1753,7 +1827,10 @@
       "infoTooltip": "<strong>Grocery Index</strong> Global grocery basket price comparison across 24 countries — tracks real-world consumer goods inflation beyond headline CPI."
     },
     "bigmac": {
-      "infoTooltip": "<strong>Real Big Mac Index</strong> The Economist's Big Mac Index measures purchasing power parity by comparing McDonald's burger prices across countries. Updated when new data is published (quarterly/annually)."
+      "infoTooltip": "<strong>Real Big Mac Index</strong> The Economist's Big Mac Index measures purchasing power parity by comparing McDonald's burger prices across countries. Updated when new data is published (quarterly/annually).",
+      "wow": "年环比",
+      "country": "国家",
+      "globalAvg": "全球平均"
     },
     "defiTokens": {
       "infoTooltip": "<strong>DeFi Tokens</strong> Prices and 24h/7d performance for major decentralized finance protocol tokens — DEXes, lending platforms, and yield protocols."

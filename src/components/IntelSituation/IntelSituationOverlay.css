@@ -1,0 +1,623 @@
+/* IntelSituationOverlay — intelligence dark-style overlay */
+/* Mounted inside #mapContainer — cover map canvas only; sit above deck.gl layers */
+.intel-situation-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 300;
+}
+
+.intel-situation-overlay.iso-visible {
+  opacity: 1;
+}
+
+.iso-inner {
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  width: min(980px, calc(100% - 48px));
+  height: min(760px, calc(100% - 48px));
+  margin: 24px;
+  gap: 12px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+/* Toolbar */
+.iso-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  background: rgba(10, 14, 20, 0.9);
+  border: 1px solid rgba(0, 212, 170, 0.25);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.iso-report-id {
+  font-size: 11px;
+  font-family: monospace;
+  color: rgba(0, 212, 170, 0.7);
+  letter-spacing: 0.05em;
+}
+
+.iso-target-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  flex: 1;
+}
+
+.iso-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.iso-close-btn:hover {
+  background: rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ISO-GRID CYBER ANIMATION
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Grid — 2 cols × 3 rows */
+/* Default hidden — only visible during content/live phases */
+.iso-grid {
+  display: none;
+  grid-template-columns: repeat(2, 220px);
+  grid-template-rows: repeat(3, minmax(180px, 1fr));
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  justify-content: space-around;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 170, 0.3) transparent;
+}
+
+.iso-grid::-webkit-scrollbar {
+  width: 4px;
+}
+.iso-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+.iso-grid::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 170, 0.3);
+  border-radius: 2px;
+}
+
+/* Show grid during content and live phases */
+.iso-grid.iso-content-phase,
+.iso-grid.iso-live {
+  display: grid;
+}
+
+
+/* Panel — HUD 切角风格 */
+.iso-panel {
+  position: relative;
+  background: rgba(10, 14, 20, 0.88);
+  border: none;
+  clip-path: polygon(
+    10px 0%,
+    calc(100% - 10px) 0%,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0% calc(100% - 10px),
+    0% 10px
+  );
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  will-change: transform, opacity;
+}
+
+/* 面板边框发光效果 */
+.iso-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(
+    10px 0%,
+    calc(100% - 10px) 0%,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0% calc(100% - 10px),
+    0% 10px
+  );
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 170, 0.6) 0%,
+    rgba(0, 212, 170, 0.2) 50%,
+    rgba(0, 212, 170, 0.6) 100%
+  );
+  z-index: -1;
+  animation: iso-panel-glow 4s ease-in-out infinite;
+}
+
+/* 面板扫描线纹理 */
+.iso-panel::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 212, 170, 0.02) 3px,
+    rgba(0, 212, 170, 0.02) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  clip-path: polygon(
+    10px 0%,
+    calc(100% - 10px) 0%,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0% calc(100% - 10px),
+    0% 10px
+  );
+}
+
+/* 面板发光动画 */
+@keyframes iso-panel-glow {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+/* 角落科技装饰 - 外部延伸的 L 形线条 */
+.iso-panel-corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.iso-panel-corner--tl {
+  top: -4px;
+  left: -4px;
+  border-top: 2px solid rgba(0, 212, 170, 0.8);
+  border-left: 2px solid rgba(0, 212, 170, 0.8);
+}
+
+.iso-panel-corner--tr {
+  top: -4px;
+  right: -4px;
+  border-top: 2px solid rgba(0, 212, 170, 0.8);
+  border-right: 2px solid rgba(0, 212, 170, 0.8);
+}
+
+.iso-panel-corner--bl {
+  bottom: -4px;
+  left: -4px;
+  border-bottom: 2px solid rgba(0, 212, 170, 0.8);
+  border-left: 2px solid rgba(0, 212, 170, 0.8);
+}
+
+.iso-panel-corner--br {
+  bottom: -4px;
+  right: -4px;
+  border-bottom: 2px solid rgba(0, 212, 170, 0.8);
+  border-right: 2px solid rgba(0, 212, 170, 0.8);
+}
+
+/* 内部内容区域 */
+.iso-panel-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  background: rgba(10, 14, 20, 0.92);
+  clip-path: polygon(
+    10px 0%,
+    calc(100% - 10px) 0%,
+    100% 10px,
+    100% calc(100% - 10px),
+    calc(100% - 10px) 100%,
+    10px 100%,
+    0% calc(100% - 10px),
+    0% 10px
+  );
+}
+
+.iso-panel--1,
+.iso-panel--2,
+.iso-panel--3,
+.iso-panel--4,
+.iso-panel--5,
+.iso-panel--6 {
+  /* Delays applied via triggerPanelReveal */
+}
+
+@keyframes iso-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Panel header — HUD 科技风格 */
+.iso-panel-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  flex-shrink: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 212, 170, 0.08) 0%,
+    transparent 100%
+  );
+}
+
+/* 头部渐变分隔线 */
+.iso-panel-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 212, 170, 0.6) 20%,
+    rgba(0, 212, 170, 0.8) 50%,
+    rgba(0, 212, 170, 0.6) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px rgba(0, 212, 170, 0.4);
+}
+
+.iso-panel-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #00d4aa;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+}
+
+/* Status badge — HUD 斜角风格 */
+.iso-status {
+  font-size: 9px;
+  padding: 3px 8px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.iso-status--unavailable {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.35);
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+}
+
+.iso-status--loaded {
+  background: rgba(0, 212, 170, 0.2);
+  color: #00ffcc;
+  clip-path: polygon(4px 0%, 100% 0%, calc(100% - 4px) 100%, 0% 100%);
+  animation: iso-badge-glow 3s ease-in-out infinite;
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+}
+
+@keyframes iso-badge-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px rgba(0, 212, 170, 0.4), inset 0 0 4px rgba(0, 212, 170, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(0, 212, 170, 0.8), inset 0 0 8px rgba(0, 212, 170, 0.2);
+  }
+}
+
+/* Panel body */
+.iso-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.5;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 212, 170, 0.3) transparent;
+}
+
+.iso-panel-body::-webkit-scrollbar {
+  width: 4px;
+}
+.iso-panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.iso-panel-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 170, 0.3);
+  border-radius: 2px;
+}
+
+.iso-panel-body--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iso-empty-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  font-style: italic;
+}
+
+/* Evidence items */
+.iso-evidence-item {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.iso-evidence-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.iso-evidence-title {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 3px;
+  font-size: 11px;
+}
+
+.iso-evidence-body {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 10px;
+  line-height: 1.45;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.iso-evidence-source {
+  font-size: 10px;
+  color: rgba(0, 212, 170, 0.5);
+  margin-top: 3px;
+  font-style: italic;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ISO-GRID CYBER ANIMATION — panels + live phase
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Phase 2: iso-content-phase — panels revealed one by one ────── */
+
+/* Panels revealed one by one via iso-panel-reveal animation */
+.iso-panel-reveal {
+  animation: iso-panel-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes iso-panel-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Phase 3: iso-live-phase — sustained ambient effects ─────────── */
+
+.iso-grid.iso-live {
+  animation: iso-breathe 6s ease-in-out infinite;
+}
+
+@keyframes iso-breathe {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.88; }
+}
+
+/* 扫描容器 */
+.iso-scan-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+
+/* 辅助扫描线 - 更细更快的细线 */
+.iso-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 255, 170, 0.25) 30%,
+    rgba(0, 255, 170, 0.4) 50%,
+    rgba(0, 255, 170, 0.25) 70%,
+    transparent 100%
+  );
+  animation: iso-scan-line-fast 3s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+@keyframes iso-scan-line-fast {
+  0%   { top: -1px; opacity: 0; }
+  5%   { opacity: 0.5; }
+  95%  { opacity: 0.3; }
+  100% { top: 100%; opacity: 0; }
+}
+
+
+/* 右上角数据流装饰 */
+.iso-data-stream {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  width: 80px;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.iso-data-stream::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 170, 0.8), transparent);
+  animation: iso-data-flow 2s linear infinite;
+}
+
+@keyframes iso-data-flow {
+  0%   { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* 左下角状态指示器 */
+.iso-status-indicator {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-family: monospace;
+  color: rgba(0, 212, 170, 0.7);
+}
+
+.iso-status-indicator::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00d4aa;
+  animation: iso-blink 1s ease-in-out infinite;
+}
+
+@keyframes iso-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(0, 212, 170, 0.8); }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+
+/* GPU-accelerated elements */
+.iso-panel {
+  will-change: transform, opacity;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   LEFT SUBTITLE BAR
+   Scrolling text overlay following AI dialogue
+   ═══════════════════════════════════════════════════════════════════ */
+
+.iso-subtitle-bar {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  max-height: 70%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 12px;
+  background: rgba(10, 14, 20, 0.88);
+  border-right: 1px solid rgba(0, 212, 170, 0.3);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.iso-subtitle-line {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin-bottom: 4px;
+  text-shadow: 0 0 8px rgba(0, 212, 170, 0.5);
+  animation: iso-subtitle-fade-in 0.3s ease-out;
+  word-break: break-word;
+}
+
+.iso-subtitle-line.iso-subtitle--scrolling {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.iso-subtitle-line.iso-subtitle--typing {
+  border-right: 2px solid rgba(0, 212, 170, 0.8);
+  animation: iso-subtitle-blink-caret 0.6s step-end infinite;
+}
+
+@keyframes iso-subtitle-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes iso-subtitle-blink-caret {
+  0%, 100% { border-color: rgba(0, 212, 170, 0.8); }
+  50% { border-color: transparent; }
+}
+
+.iso-subtitle-meta {
+  font-size: 9px;
+  color: rgba(0, 212, 170, 0.5);
+  font-family: monospace;
+  margin-top: 2px;
+}
+
+.iso-subtitle-bar-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 212, 170, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0, 212, 170, 0.2);
+}

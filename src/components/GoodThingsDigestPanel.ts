@@ -17,7 +17,7 @@ export class GoodThingsDigestPanel extends Panel {
   private summaryAbort: AbortController | null = null;
 
   constructor() {
-    super({ id: 'digest', title: '5 Good Things', trackActivity: false });
+    super({ id: 'digest', title: t('panels.goodThings'), trackActivity: false });
     this.content.innerHTML = '<p class="digest-placeholder">Loading today\u2019s digest\u2026</p>';
   }
 

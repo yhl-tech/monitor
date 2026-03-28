@@ -910,6 +910,55 @@ export class MapContainer {
     }
   }
 
+  /**
+   * Fly to a specific city location with smooth animation.
+   * Used by IntelSituationOverlay to simulate "locking on target".
+   */
+  public flyToCity(lat: number, lon: number, zoom = 17, duration = 2500): void {
+    if (this.useGlobe) {
+      this.globeMap?.flyToCity(lat, lon, zoom, duration);
+      return;
+    }
+    if (this.useDeckGL) {
+      this.deckGLMap?.flyToCity(lat, lon, zoom, duration);
+    } else {
+      // SVG map: simple setCenter (no fly animation)
+      this.svgMap?.setCenter(lat, lon);
+    }
+  }
+
+  public setAutoRotate(enabled: boolean): void {
+    this.globeMap?.setAutoRotate(enabled);
+  }
+
+  /**
+   * Force switch to flat map mode (2D).
+   * Used by IntelSituationOverlay when it needs to ensure 2D map is active.
+   * Saves the current globe center so we can restore it when overlay closes.
+   */
+  public forceSwitchToFlatMode(): { lat: number; lon: number } | null {
+    if (!this.useGlobe) return null;
+    const center = this.getCenter();
+    this.switchToFlat();
+    return center;
+  }
+
+  /**
+   * Restore globe mode if it was active before Intel overlay.
+   * Called when IntelSituationOverlay clears.
+   */
+  public restoreGlobeModeIfNeeded(
+    wasGlobeMode: boolean,
+    prevCenter?: { lat: number; lon: number } | null,
+  ): void {
+    if (wasGlobeMode) {
+      this.switchToGlobe();
+      if (prevCenter) {
+        this.setCenter(prevCenter.lat, prevCenter.lon, 4);
+      }
+    }
+  }
+
   public highlightCountry(code: string): void {
     if (this.useDeckGL) {
       this.deckGLMap?.highlightCountry(code);

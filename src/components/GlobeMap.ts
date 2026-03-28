@@ -1764,7 +1764,6 @@ export class GlobeMap {
     const el = document.createElement('div');
     el.className = 'map-controls deckgl-controls';
     el.innerHTML = `
-      <span class="globe-beta-badge">BETA</span>
       <div class="zoom-controls">
         <button class="map-btn zoom-in"    title="Zoom in">+</button>
         <button class="map-btn zoom-out"   title="Zoom out">-</button>
@@ -1827,10 +1826,6 @@ export class GlobeMap {
           </label>`;
         }).join('')}
       </div>`;
-    const authorBadge = document.createElement('div');
-    authorBadge.className = 'map-author-badge';
-    authorBadge.textContent = '© Elie Habib · Someone™';
-    el.appendChild(authorBadge);
     this.container.appendChild(el);
 
     el.querySelectorAll('.layer-toggle input').forEach(input => {
@@ -2596,6 +2591,63 @@ export class GlobeMap {
     return `${west.toFixed(4)},${south.toFixed(4)},${east.toFixed(4)},${north.toFixed(4)}`;
   }
 
+  // ─── Rotation control ─────────────────────────────────────────────────────
+
+  private autoRotateEnableId: number | null = null;
+  private autoRotateStopId: number | null = null;
+
+  public setAutoRotate(enabled: boolean): void {
+    if (!this.controls) return;
+
+    // Cancel any pending enable or stop rAF
+    if (this.autoRotateEnableId != null) {
+      cancelAnimationFrame(this.autoRotateEnableId);
+      this.autoRotateEnableId = null;
+    }
+    if (this.autoRotateStopId != null) {
+      cancelAnimationFrame(this.autoRotateStopId);
+      this.autoRotateStopId = null;
+    }
+
+    if (enabled) {
+      const controls = this.controls;
+      // High speed — intentional "frantic searching" effect before panel appears
+      controls.autoRotateSpeed = 3.0;
+      this.wakeGlobe();
+      // One-frame delay so OrbitControls consumes the large clock.getDelta() spike
+      // that occurs on the first frame after resumeAnimation()
+      this.autoRotateEnableId = requestAnimationFrame(() => {
+        this.autoRotateEnableId = null;
+        if (!this.destroyed) controls.autoRotate = true;
+      });
+    } else {
+      // Smooth deceleration from current speed → 0
+      this.smoothStopAutoRotate();
+    }
+  }
+
+  private smoothStopAutoRotate(): void {
+    const controls = this.controls;
+    if (!controls) return;
+    const startSpeed = controls.autoRotateSpeed;
+    const duration = 500;
+    const startTime = performance.now();
+
+    const tick = () => {
+      const t = Math.min((performance.now() - startTime) / duration, 1);
+      const eased = 1 - t * t; // quadratic ease-in
+      controls.autoRotateSpeed = startSpeed * eased;
+      if (t < 1) {
+        this.autoRotateStopId = requestAnimationFrame(tick);
+      } else {
+        controls.autoRotate = false;
+        controls.autoRotateSpeed = 3.0; // restore for next enable
+        this.autoRotateStopId = null;
+      }
+    };
+    this.autoRotateStopId = requestAnimationFrame(tick);
+  }
+
   // ─── Resize ────────────────────────────────────────────────────────────────
 
   public resize(): void {
@@ -2722,6 +2774,7 @@ export class GlobeMap {
   public triggerNuclearClick(_id: string): void {}
   public triggerIrradiatorClick(_id: string): void {}
   public fitCountry(code: string): void {
+    if (!this.initialized) return;
     if (!this.globe) return;
     const bbox = getCountryBbox(code);
     if (!bbox) return;
@@ -2733,6 +2786,25 @@ export class GlobeMap {
     const altitude = span > 60 ? 1.0 : span > 20 ? 0.7 : span > 8 ? 0.45 : span > 3 ? 0.25 : 0.12;
     this.globe.pointOfView({ lat, lng, altitude }, 1200);
   }
+
+  /**
+   * Fly to a specific city location with smooth animation.
+   * Used by IntelSituationOverlay to simulate "locking on target".
+   * Map zoom → globe altitude:
+   *   zoom 2  → altitude ~2.5 (world view)
+   *   zoom 10 → altitude ~0.5 (regional)
+   *   zoom 17 → altitude ~0.06 (city level)
+   */
+  public flyToCity(lat: number, lon: number, zoom = 17, duration = 2500): void {
+    if (!this.initialized) return;
+    if (!this.globe) return;
+    this.wakeGlobe();
+    // Convert zoom level to globe altitude
+    // Using a logarithmic mapping: zoom 2 → ~2.5, zoom 17 → ~0.06
+    const altitude = Math.max(0.05, Math.min(3.0, 4.5 * Math.pow(0.78, zoom - 2)));
+    this.globe.pointOfView({ lat, lng: lon, altitude }, duration);
+  }
+
   public highlightCountry(_code: string): void {}
   public clearCountryHighlight(): void {}
   public setEarthquakes(earthquakes: Earthquake[]): void {
@@ -3519,6 +3591,8 @@ export class GlobeMap {
     if (this.flushTimer) { clearTimeout(this.flushTimer); this.flushTimer = null; }
     if (this.flushMaxTimer) { clearTimeout(this.flushMaxTimer); this.flushMaxTimer = null; }
     if (this.autoRotateTimer) clearTimeout(this.autoRotateTimer);
+    if (this.autoRotateEnableId != null) { cancelAnimationFrame(this.autoRotateEnableId); this.autoRotateEnableId = null; }
+    if (this.autoRotateStopId != null) { cancelAnimationFrame(this.autoRotateStopId); this.autoRotateStopId = null; }
     this.reversedRingCache.clear();
     this.hideTooltip();
     if (this.satHoverStyle) { this.satHoverStyle.remove(); this.satHoverStyle = null; }

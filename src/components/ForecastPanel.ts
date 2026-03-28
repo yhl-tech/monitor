@@ -77,7 +77,7 @@ export class ForecastPanel extends Panel {
   private activeDomain: string = 'all';
 
   constructor() {
-    super({ id: 'forecast', title: 'AI Forecasts', showCount: true, infoTooltip: t('components.forecast.infoTooltip') });
+    super({ id: 'forecast', title: t('panels.aiForecasts'), showCount: true, infoTooltip: t('components.forecast.infoTooltip') });
     injectStyles();
     this.content.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;

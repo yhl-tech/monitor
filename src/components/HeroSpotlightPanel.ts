@@ -1,4 +1,5 @@
 import { Panel } from './Panel';
+import { t } from '@/services/i18n';
 import type { NewsItem } from '@/types';
 import { escapeHtml, sanitizeUrl } from '@/utils/sanitize';
 
@@ -17,7 +18,7 @@ export class HeroSpotlightPanel extends Panel {
   public onLocationRequest?: (lat: number, lon: number) => void;
 
   constructor() {
-    super({ id: 'spotlight', title: "Today's Hero", trackActivity: false });
+    super({ id: 'spotlight', title: t('panels.todaysHero'), trackActivity: false });
     this.content.innerHTML =
       '<div class="hero-card-loading">Loading today\'s hero...</div>';
   }

@@ -161,6 +161,11 @@
   gap: 2px;
 }
 
+.iac-btn-clear-chats {
+  width: 22px;
+  height: 22px;
+}
+
 .iac-section-label {
   display: none; /* collapsed — icon-only list */
   font-size: 0.6rem;
@@ -244,6 +249,77 @@
   font-size: 0.75rem;
   text-align: center;
   padding: 20px;
+}
+
+.iac-thread-empty--intro {
+  align-items: flex-start;
+  justify-content: center;
+  padding: 28px 16px;
+}
+
+.iac-empty-card {
+  width: 100%;
+  max-width: 360px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 18px 16px 14px;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  text-align: left;
+}
+
+.iac-empty-emoji {
+  font-size: 24px;
+  line-height: 1;
+  margin-bottom: 10px;
+}
+
+.iac-empty-title {
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.iac-empty-subtitle {
+  margin: 10px 0 0;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.iac-empty-list {
+  margin: 10px 0 0;
+  padding-left: 16px;
+  color: var(--text-soft, rgba(255, 255, 255, 0.84));
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.iac-empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.iac-empty-action {
+  border: 1px solid rgba(68, 255, 136, 0.28);
+  border-radius: 999px;
+  background: rgba(68, 255, 136, 0.07);
+  color: #7fffb1;
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 7px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.iac-empty-action:hover {
+  background: rgba(68, 255, 136, 0.14);
+  border-color: rgba(68, 255, 136, 0.5);
+  color: #b8ffd5;
 }
 
 /* ── Messages ─────────────────────────────────────────────────────────────── */
@@ -603,3 +679,318 @@
 .iac-send-btn:hover { background: var(--green-dim, #1a4d2e); }
 .iac-send-btn.loading { opacity: 0.5; cursor: not-allowed; }
 .iac-send-btn svg { pointer-events: none; }
+
+/* ── Intelligence Report (军事情报报告) ─────────────────────────────────── */
+.iac-report {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 6px;
+  background: var(--surface);
+  border-left: 3px solid var(--green, #00c853);
+}
+
+.iac-report-header {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.iac-report-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.iac-report-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: rgba(248, 113, 113, 0.15);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #f87171;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.iac-report-id {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  font-family: monospace;
+  letter-spacing: 0.04em;
+}
+
+.iac-report-sev {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.iac-report-meta {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-top: 3px;
+  letter-spacing: 0.03em;
+}
+
+.iac-report-bluf {
+  padding: 8px 10px;
+  font-size: 0.72rem;
+  color: var(--text);
+  background: rgba(0, 200, 83, 0.08);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.iac-report-subject {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--surface-hover);
+  border-bottom: 1px solid var(--border);
+}
+
+.iac-report-subject-label {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.iac-report-subject-value {
+  font-size: 0.72rem;
+  color: var(--green, #00c853);
+  font-weight: 600;
+}
+
+.iac-report-sections {
+  display: flex;
+  flex-direction: column;
+}
+
+.iac-report-section {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.iac-report-section:last-child {
+  border-bottom: none;
+}
+
+.iac-report-heading {
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.iac-report-body {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ── Thinking Process (研判流程) ─────────────────────────────────────────── */
+.iac-tp {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 6px;
+  background: var(--surface);
+  border-left: 3px solid var(--green-dim, #1a4d2e);
+}
+
+.iac-tp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.iac-tp-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.iac-tp-steps {
+  display: flex;
+  flex-direction: column;
+}
+
+.iac-tp-step {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.iac-tp-step:last-child {
+  border-bottom: none;
+}
+
+.iac-tp-step-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.iac-tp-step-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--green-dim, #1a4d2e);
+  color: var(--green, #00c853);
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iac-tp-step-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+  text-transform: uppercase;
+}
+
+.iac-tp-step-title {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.iac-tp-step-body {
+  padding-left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.iac-tp-desc {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+
+.iac-tp-result {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  padding: 4px 7px;
+  background: var(--surface-hover);
+  border-radius: 4px;
+  border-left: 2px solid var(--green-dim, #1a4d2e);
+}
+
+.iac-tp-evi {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.iac-tp-evi-label {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.iac-tp-evi-tag {
+  font-size: 0.6rem;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: monospace;
+}
+
+.iac-tp-prob {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.iac-tp-prob-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border);
+}
+
+.iac-tp-prob-loc {
+  color: var(--text-dim);
+}
+
+.iac-tp-prob-val {
+  color: var(--green, #00c853);
+  font-weight: 700;
+  font-size: 0.68rem;
+}
+
+.iac-tp--collapsed .iac-tp-steps {
+  display: none;
+}
+
+/* ── Typewriter (打字机) ─────────────────────────────────────────────────── */
+.iac-tw-caret {
+  display: inline-block;
+  width: 0.45em;
+  margin-left: 1px;
+  color: var(--green, #00c853);
+  font-weight: 300;
+  animation: iac-tw-blink 0.9s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes iac-tw-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.iac-tw-bubble,
+.iac-tw-bluf,
+.iac-tw-section-body {
+  min-height: 1.2em;
+}
+
+.iac-thinking-slot {
+  display: none;
+}
+
+.iac-msg--tw .iac-bubble--assistant {
+  min-height: 2.5rem;
+}

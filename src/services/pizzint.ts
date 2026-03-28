@@ -42,6 +42,26 @@ const DEFCON_LABELS: Record<number, string> = {
   5: 'components.pizzint.defconLabels.5',
 };
 
+/** API `name` (English) → i18n key under `components.pizzint.names.*` */
+const PIZZINT_LOCATION_I18N: Record<string, string> = {
+  'Extreme Pizza': 'components.pizzint.names.extremePizza',
+  'District Pizza Palace': 'components.pizzint.names.districtPizzaPalace',
+  'We, The Pizza': 'components.pizzint.names.weThePizza',
+  'Nighthawk Brewery & Pizza': 'components.pizzint.names.nighthawkBreweryPizza',
+  'Papa Johns Pizza': 'components.pizzint.names.papaJohnsPizza',
+  'Pizzato Pizza': 'components.pizzint.names.pizzatoPizza',
+  "Domino's Pizza (Pentagon Closest)": 'components.pizzint.names.dominosPentagonClosest',
+  "Freddie's Beach Bar & Restaurant": 'components.pizzint.names.freddiesBeachBar',
+  'The Little Gay Pub': 'components.pizzint.names.littleGayPub',
+};
+
+export function localizePizzintLocationName(name: string): string {
+  const i18nKey = PIZZINT_LOCATION_I18N[name.trim()];
+  if (!i18nKey) return name;
+  const localized = t(i18nKey);
+  return localized === i18nKey ? name : localized;
+}
+
 const FRESHNESS_REVERSE: Record<string, 'fresh' | 'stale'> = {
   DATA_FRESHNESS_FRESH: 'fresh',
   DATA_FRESHNESS_STALE: 'stale',

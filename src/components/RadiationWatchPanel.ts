@@ -1,4 +1,5 @@
 import { Panel } from './Panel';
+import { t } from '@/services/i18n';
 import type { RadiationObservation, RadiationWatchResult } from '@/services/radiation';
 import { escapeHtml } from '@/utils/sanitize';
 
@@ -19,7 +20,7 @@ export class RadiationWatchPanel extends Panel {
   constructor() {
     super({
       id: 'radiation-watch',
-      title: 'Radiation Watch',
+      title: t('panels.radiationWatch'),
       showCount: true,
       trackActivity: true,
       infoTooltip: 'Seeded EPA RadNet and Safecast readings with anomaly scoring and source-confidence synthesis. This panel answers what is normal, what is elevated, and which anomalies are confirmed versus tentative.',
