@@ -21,7 +21,7 @@
     "postinstall": "cd blog-site && npm ci --prefer-offline",
     "build:blog": "cd blog-site && npm run build && node scripts/copy-blog.mjs",
     "build:pro": "cd pro-test && npm install && npm run build",
-    "build": "npm run build:blog && tsc && vite build",
+    "build": "npm run build:blog && tsc && vite build && node scripts/copy-server.mjs",
     "build:sidecar-sebuf": "node scripts/build-sidecar-sebuf.mjs",
     "build:desktop": "node scripts/build-sidecar-sebuf.mjs && node scripts/build-sidecar-handlers.mjs && tsc && vite build",
     "build:full": "npm run build:blog && cross-env-shell VITE_VARIANT=full \"tsc && vite build\"",
