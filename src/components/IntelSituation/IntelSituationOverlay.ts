@@ -379,21 +379,51 @@ export class IntelSituationOverlay {
   }
 
   /**
-   * Force panels to animate in sequence by forcing CSS reflow
+   * HUD 分步展开：为每个面板注入 corner dots + glitch overlay，
+   * 并以两值 animationDelay 分别控制线绘制和抖动时序。
    */
   private triggerPanelReveal(grid: HTMLElement): void {
-    console.log('[DEBUG] triggerPanelReveal called, gridClasses:', grid.className, 'panelCount:', grid.querySelectorAll(".iso-panel").length)
-
     const panels = grid.querySelectorAll(".iso-panel")
+    const cornerSelectors = [
+      ".iso-panel-corner--tl",
+      ".iso-panel-corner--tr",
+      ".iso-panel-corner--bl",
+      ".iso-panel-corner--br",
+    ] as const
+
     panels.forEach((panel, idx) => {
       const el = panel as HTMLElement
-      // Set staggered delay based on panel index
+      const staggerMs = idx * 350
+      // Jitter fires when height expansion peaks ~72% × 720ms ≈ 518ms
+      const jitterDelayMs = staggerMs + 518
+
+      // CSS variables consumed by child element animation-delay calc()
       el.style.setProperty("--panel-index", String(idx))
-      // Force reflow to reset animation state
+      el.style.setProperty("--reveal-delay", `${staggerMs}ms`)
+
+      // Force reflow to reset any previous animation state
       void el.offsetWidth
-      // Re-add animation class
+
+      // Inject corner blinking dots (idempotent)
+      for (const sel of cornerSelectors) {
+        const corner = el.querySelector(sel)
+        if (corner && !corner.querySelector(".iso-corner-dot")) {
+          const dot = document.createElement("span")
+          dot.className = "iso-corner-dot"
+          corner.appendChild(dot)
+        }
+      }
+
+      // Inject glitch chromatic aberration overlay — auto-removes on animationend
+      el.querySelector(".iso-glitch-overlay")?.remove()
+      const glitch = document.createElement("div")
+      glitch.className = "iso-glitch-overlay"
+      el.appendChild(glitch)
+      glitch.addEventListener("animationend", () => glitch.remove(), { once: true })
+
+      // Two-value delay: frame-draw delay | jitter delay
       el.classList.add("iso-panel-reveal")
-      el.style.animationDelay = `${idx * 350}ms`
+      el.style.animationDelay = `${staggerMs}ms, ${jitterDelayMs}ms`
     })
   }
 

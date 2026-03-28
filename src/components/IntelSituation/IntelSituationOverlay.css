@@ -160,7 +160,7 @@
   animation: iso-panel-glow 4s ease-in-out infinite;
 }
 
-/* 面板扫描线纹理 */
+/* 面板扫描线纹理（带漂移动画） */
 .iso-panel::after {
   content: '';
   position: absolute;
@@ -168,10 +168,11 @@
   background: repeating-linear-gradient(
     0deg,
     transparent 0px,
-    transparent 3px,
-    rgba(0, 212, 170, 0.02) 3px,
-    rgba(0, 212, 170, 0.02) 4px
+    transparent 2px,
+    rgba(0, 212, 170, 0.03) 2px,
+    rgba(0, 212, 170, 0.03) 3px
   );
+  background-size: 100% 3px;
   pointer-events: none;
   z-index: 1;
   clip-path: polygon(
@@ -184,6 +185,12 @@
     0% calc(100% - 10px),
     0% 10px
   );
+  animation: iso-scanline-drift 10s linear infinite;
+}
+
+@keyframes iso-scanline-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 0 -30px; }
 }
 
 /* 面板发光动画 */
@@ -257,17 +264,6 @@
 .iso-panel--5,
 .iso-panel--6 {
   /* Delays applied via triggerPanelReveal */
-}
-
-@keyframes iso-slide-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 /* Panel header — HUD 科技风格 */
@@ -423,19 +419,170 @@
 
 /* ── Phase 2: iso-content-phase — panels revealed one by one ────── */
 
-/* Panels revealed one by one via iso-panel-reveal animation */
-.iso-panel-reveal {
-  animation: iso-panel-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+/* CSS variable contracts (overridden inline by triggerPanelReveal) */
+.iso-panel {
+  --reveal-delay: 0ms;
+  --panel-index: 0;
 }
 
-@keyframes iso-panel-reveal {
+/* ─── HUD 分步展开动画：飞入 → 撑高 → 内容写入 ─── */
+/* 左列从左飞入，右列从右飞入，交替产生档案"被调取"的立体感 */
+.iso-panel--1, .iso-panel--3, .iso-panel--5 { --fly-x: -28px; }
+.iso-panel--2, .iso-panel--4, .iso-panel--6 { --fly-x:  28px; }
+
+/* animation-delay 由 JS 注入为两值列表（飞入展开 / 抖动） */
+.iso-panel-reveal {
+  transform-origin: top center;
+  animation:
+    iso-panel-frame-draw 0.72s cubic-bezier(0.16, 1, 0.3, 1) both,
+    iso-entry-jitter     0.18s steps(2) both;
+}
+
+/* Phase 1 (0–20%): 从侧边飞入，保持极薄（scaleY≈0）
+   Phase 2 (20–72%): 高度向下展开，轻微过冲
+   Phase 3 (72–100%): 弹性回位，稳定落地 */
+@keyframes iso-panel-frame-draw {
+  0% {
+    transform: translateX(var(--fly-x, -28px)) translateY(-6px) scaleY(0.025);
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  /* 飞入到位，仍然极薄 */
+  20% {
+    transform: translateX(0) translateY(0) scaleY(0.025);
+    opacity: 1;
+  }
+  /* 高度展开，轻微过冲 */
+  72% {
+    transform: translateX(0) scaleY(1.05);
+  }
+  /* 回弹 */
+  85% {
+    transform: translateX(0) scaleY(0.97);
+  }
+  100% {
+    transform: translateX(0) scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* 高频震荡 — 撑高完成瞬间的数字跳帧抖动（steps 硬切，无插值） */
+@keyframes iso-entry-jitter {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3px, 1px); }
+  50%  { transform: translate(2px, -1px); }
+  75%  { transform: translate(-1px, 2px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ─── 内容区：撑高完成后写入 ─── */
+.iso-panel-reveal .iso-panel-content {
+  animation: iso-content-materialize 0.28s ease-out both;
+  animation-delay: calc(var(--reveal-delay) + 500ms);
+}
+
+@keyframes iso-content-materialize {
+  0%   { opacity: 0; filter: blur(3px) brightness(2.5); }
+  /* 数据写入闪烁帧 */
+  35%  { opacity: 0.6; filter: blur(0.5px) brightness(1.6) hue-rotate(20deg); }
+  60%  { opacity: 0.3; filter: blur(0) brightness(2.2); }
+  78%  { opacity: 1;   filter: brightness(1.1); }
+  100% { opacity: 1;   filter: none; }
+}
+
+/* ─── 角落 L 形线条：撑高结束后弹出 ─── */
+.iso-panel-reveal .iso-panel-corner {
+  animation: iso-corner-draw-in 0.18s ease-out both;
+  animation-delay: calc(var(--reveal-delay) + 540ms);
+}
+
+@keyframes iso-corner-draw-in {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: scale(0);
+    filter: brightness(8);
+  }
+  55% {
+    transform: scale(1.5);
+    filter: brightness(4);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* ─── 角落闪烁方块（四角交错延迟，模拟系统轮询） ─── */
+.iso-corner-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #00d4aa;
+  box-shadow: 0 0 6px rgba(0, 212, 170, 0.9);
+  opacity: 0;
+  animation: iso-corner-dot-blink 1.4s ease-in-out infinite;
+  animation-fill-mode: both;
+}
+
+.iso-panel-corner--tl .iso-corner-dot { top: -2px;    left: -2px;  animation-delay: calc(var(--reveal-delay) + 620ms); }
+.iso-panel-corner--tr .iso-corner-dot { top: -2px;    right: -2px; animation-delay: calc(var(--reveal-delay) + 760ms); }
+.iso-panel-corner--bl .iso-corner-dot { bottom: -2px; left: -2px;  animation-delay: calc(var(--reveal-delay) + 690ms); }
+.iso-panel-corner--br .iso-corner-dot { bottom: -2px; right: -2px; animation-delay: calc(var(--reveal-delay) + 830ms); }
+
+@keyframes iso-corner-dot-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px rgba(0, 212, 170, 0.9), 0 0 12px rgba(0, 212, 170, 0.4); }
+  45%       { opacity: 0.1; box-shadow: none; }
+  55%       { opacity: 0.7; }
+}
+
+/* ─── 故障色差叠加层：飞入时随面板触发 ─── */
+.iso-glitch-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  mix-blend-mode: screen;
+  animation: iso-glitch-chromatic 0.65s steps(3) forwards;
+  animation-delay: var(--reveal-delay);
+}
+
+@keyframes iso-glitch-chromatic {
+  /* 飞入阶段：顶部水平亮线随面板移动 */
+  0% {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 255, 200, 0.6) 0%,
+      rgba(0, 255, 200, 0.3) 3%,
+      transparent 6%
+    );
+    transform: translateX(var(--fly-x, -28px));
+    opacity: 1;
+  }
+  /* 撑高中段：红蓝通道错位条纹 */
+  33% {
+    background:
+      linear-gradient(90deg, rgba(255, 30, 80, 0.2) 0%, transparent 35%),
+      linear-gradient(90deg, transparent 65%, rgba(0, 150, 255, 0.18) 100%);
+    transform: translateX(5px);
+    opacity: 0.9;
+  }
+  /* 内容写入前：轻微色偏 */
+  66% {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 255, 200, 0.07) 0%,
+      transparent 50%,
+      rgba(255, 50, 100, 0.05) 100%
+    );
+    transform: translateX(-2px);
+    opacity: 0.45;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0);
   }
 }
 

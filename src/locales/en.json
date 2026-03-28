@@ -1486,7 +1486,7 @@
       "newChat": "New chat",
       "newChatTitle": "New analysis",
       "emptyThread": "Send a message to start the analysis.",
-      "inputPlaceholder": "Ask about geopolitical events…",
+      "inputPlaceholder": "AI agent Xiaoyuan, crawl open-source info on Yan Yalun, analyze his location and movements over the past 24 hours, predict possible transport and destination",
       "generatedAt": "Generated",
       "thinking": "Thinking",
       "showThinking": "Show reasoning",

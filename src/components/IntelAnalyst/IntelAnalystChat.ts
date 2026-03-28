@@ -75,6 +75,16 @@ function formatDualTimezone(timestamp: number): string {
   return `UTC ${utc} / 北京 ${beijing}`
 }
 
+// ─── Fixed analyst response prefix ───────────────────────────────────────────
+
+function buildFixedPrefix(): string {
+  return `
+    <div class="iac-fixed-prefix">
+      <span class="iac-fixed-prefix-text">明白。（自动出现调取、分析、比对、研判动作）按照公开媒体信息、个人社交账号信息、相关APP、人物关系等</span>
+      <div class="iac-fixed-prefix-conclusion">显示推导过程与相关结论</div>
+    </div>`
+}
+
 // ─── Per-message fragment builders ───────────────────────────────────────────
 
 function buildUserBubble(msg: ChatMessage & { role: "user" }): string {
@@ -302,10 +312,13 @@ function buildAssistantBubble(
   const bubbleInner = tw
     ? `<span class="iac-tw-bubble"></span>`
     : escapeHtml(msg.content)
+  // 有情报报告时：先固定说明（调取/分析/比对/研判），再气泡内研判结论，再报告与流程
+  const leadBlock = msg.intelReport ? buildFixedPrefix() : ""
   return `
     <div class="iac-msg iac-msg--assistant${tw ? " iac-msg--tw" : ""}" data-id="${escapeHtml(msg.id)}">
       <div class="iac-avatar iac-avatar--assistant" aria-hidden="true"></div>
       <div class="iac-msg-body">
+        ${leadBlock}
         <div class="iac-bubble iac-bubble--assistant">${bubbleInner}</div>
         ${extras}
         <div class="iac-meta iac-meta--assistant">${new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>

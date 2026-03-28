@@ -314,6 +314,7 @@
   padding: 7px 10px;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
+  text-align: left;
 }
 
 .iac-empty-action:hover {
@@ -993,4 +994,31 @@
 
 .iac-msg--tw .iac-bubble--assistant {
   min-height: 2.5rem;
+}
+
+/* ── Fixed Analyst Prefix (固定分析前缀) ─────────────────────────────────── */
+.iac-fixed-prefix {
+  margin-top: 0;
+  margin-bottom: 2px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(0, 200, 83, 0.08), rgba(0, 200, 83, 0.03));
+  border: 1px solid rgba(0, 200, 83, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid var(--green, #00c853);
+}
+
+.iac-fixed-prefix-text {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.5;
+  display: block;
+}
+
+.iac-fixed-prefix-conclusion {
+  font-size: 0.72rem;
+  color: var(--green, #00c853);
+  font-weight: 600;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(0, 200, 83, 0.2);
 }
