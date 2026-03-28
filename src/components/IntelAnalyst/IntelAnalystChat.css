@@ -379,8 +379,8 @@
 }
 
 .iac-msg--user .iac-bubble {
-  background: var(--green, #00c853);
-  color: #fff;
+  background: #2d5a3f;
+  color: rgba(255, 255, 255, 0.92);
   border-bottom-right-radius: 2px;
 }
 

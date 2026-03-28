@@ -67,12 +67,10 @@ const SEVERITY_COLOUR: Record<string, string> = {
 
 function formatDualTimezone(timestamp: number): string {
   const date = new Date(timestamp)
-  const utc = date.toLocaleTimeString("en-US", { hour12: false })
-  const beijing = date.toLocaleTimeString("zh-CN", {
+  return date.toLocaleTimeString("zh-CN", {
     hour12: false,
     timeZone: "Asia/Shanghai",
   })
-  return `UTC ${utc} / 北京 ${beijing}`
 }
 
 // ─── Fixed analyst response prefix ───────────────────────────────────────────
