@@ -176,6 +176,7 @@ export class PanelLayoutManager implements AppModule {
       ${this.ctx.isDesktopApp ? '<div class="tauri-titlebar" data-tauri-drag-region></div>' : ""}
       <div class="header">
         <div class="header-left">
+          <span class="header-left-title">开源情报智能侦搜与分析系统 <span class="header-left-pro">PRO</span></span>
           <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
@@ -267,10 +268,6 @@ export class PanelLayoutManager implements AppModule {
           <button class="mobile-search-btn" id="mobileSearchBtn" aria-label="${t("header.search")}">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </button>
-        </div>
-        <div class="header-center" aria-hidden="true">
-          <span class="header-center-title">开源情报智能侦搜与分析系统</span>
-          <span class="header-center-pro">PRO</span>
         </div>
         <div class="header-right">
           <!--

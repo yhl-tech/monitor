@@ -739,7 +739,10 @@ export class IntelAnalystChat {
       (m): m is AssistantMessage =>
         m.id === messageId && m.role === "assistant",
     )
-    if (!root || !msg?.intelReport) return
+    if (!root || !msg?.intelReport) {
+      onComplete?.()
+      return
+    }
 
     const scroll = () => {
       if (thread) thread.scrollTop = thread.scrollHeight

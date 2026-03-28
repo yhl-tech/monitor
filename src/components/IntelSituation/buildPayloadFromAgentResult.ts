@@ -108,7 +108,7 @@ function extractCityName(taskName: string, taskSummary?: string): string | null 
   const text = [taskSummary, taskName].filter(Boolean).join(" ")
   // Look for location patterns like "in Beijing" or "北京市"
   const m = text.match(/\b(?:in|at|位于|在|市|省|区)(?:\s+)([A-Za-z\u4e00-\u9fff]{2,20})/)
-  if (m) return m[1]
+  if (m && m[1]) return m[1]
   // Grab the longest meaningful token as a fallback
   const tokens = text.match(/[A-Za-z]{4,20}|[\u4e00-\u9fff]{2,8}/g)
   return tokens ? tokens[0] : null

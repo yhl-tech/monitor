@@ -160,7 +160,7 @@ function buildUrl(path: string): string {
  * Hardcoded JWT token for OSINT Intel Hub API (analyst role).
  * Used only for development/demo purposes — does not affect other modules.
  */
-const OSINT_API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInJvbGUiOiJhbmFseXN0IiwidXNlcm5hbWUiOiJhbmFseXN0IiwiZXhwIjoxNzc0NjkxNzY1LCJ0eXBlIjoiYWNjZXNzIn0.T8zjKhiszywWw43kgI3EMON89s9qoPGENagjUP_ZA2g";
+const OSINT_API_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInJvbGUiOiJhbmFseXN0IiwidXNlcm5hbWUiOiJhbmFseXN0IiwiZXhwIjoxNzc0Njk1Njg0LCJ0eXBlIjoiYWNjZXNzIn0.u3J452Ii-mQT2mmDiNZ5B-RM8VQJ1HN_sIS7R5WoHTo";
 
 function getAuthHeaders(): Record<string, string> {
   return {

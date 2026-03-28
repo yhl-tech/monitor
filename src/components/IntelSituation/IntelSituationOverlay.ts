@@ -30,6 +30,7 @@ export class IntelSituationOverlay {
   private wasGlobeMode = false
 
   // Current payload for animation
+  // @ts-expect-error - managed by animation system, read by external consumers
   private currentPayload: IntelSituationPayload | null = null
 
   // Fly target queued until map context is ready
@@ -101,7 +102,7 @@ export class IntelSituationOverlay {
   updateWithResult(
     taskId: string,
     taskName: string,
-    taskSummary: string | undefined,
+    _taskSummary: string | undefined,
     countryCode: string,
     lat: number | null,
     lon: number | null,
@@ -472,7 +473,7 @@ export class IntelSituationOverlay {
       const interval = setInterval(() => {
         el.textContent = original
           .split("")
-          .map((letter, idx) => {
+          .map((_, idx) => {
             if (idx < iterations) return original[idx]
             return chars[Math.floor(Math.random() * chars.length)]
           })
